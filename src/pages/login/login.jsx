@@ -25,7 +25,7 @@ class Login extends Component{
         }
     }
     login =(e) => {
-        e.preventDefault();
+        // e.preventDefault();
         this.props.form.validateFields( async(err,value) => {
             if(!err){
                 const {username,password} = value;
