@@ -1,11 +1,15 @@
 import React,{Component} from "react"
 import "./login.less"
 import logo from "../../assets/img/loginIoc.jpg"
-import{Form,Input,Button} from "antd"
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import{Form,Input,Button,Icon,message} from "antd"
+// import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { login } from "../../api"
+import userMessage from "../../utils/userMessage"
+import storageUtils from "../../utils/storageUtils"
+import { Redirect } from "react-router"
 const Item = Form.Item
 class Login extends Component{
-    validator = (value,callback) => {
+    validator = (rule,value,callback) => {
         const length = value && value.length;
         const pwdReg = /^[a-zA-Z0-9_]+$/;
         if(!value){
@@ -22,11 +26,36 @@ class Login extends Component{
     }
     login =(e) => {
         e.preventDefault();
-        
+        this.props.form.validateFields( async(err,value) => {
+            if(!err){
+                const {username,password} = value;
+                console.log("用户信息",username,password);
+                let mess = {username,password};
+                const result = await login(mess);
+                if(result.status == 0){
+                    userMessage.user = result.data;
+                    storageUtils.setUser(result.data);
+                    message.success("登录成功");
+                    this.props.history.replace("/");
+                } else {
+                    message.error(result.msg);
+                }
+            } else {
+                console.log("表单校验错误");
+            }
+        })
+    }
+    toRegister = () =>{
+        this.props.history.replace("/register");
     }
 
     render(){
         const { getFieldDecorator } = this.props.form
+        if(userMessage.user && userMessage.user._id){
+            return (
+                <Redirect to="/"></Redirect>
+            )
+        }
         return(
             <div className="login">
                 <header className="login-header">
@@ -49,7 +78,7 @@ class Login extends Component{
                                     }
                                 )(
                                     <Input placeholder="请输入用户名" className="login-form-button"
-                                    prefix={<UserOutlined style={{color: 'rgba(0,0,0,.25)'}} />}></Input>
+                                    prefix={<Icon type="user" style={{color: 'rgba(0,0,0,.25)'}} />}></Input>
                                 )
                             }
                         </Item>
@@ -63,13 +92,16 @@ class Login extends Component{
                                     }
                                 )(
                                     <Input placeholder="请输入密码" className="login-form-button"
-                                    prefix={<LockOutlined style={{color: 'rgba(0,0,0,.25)'}} />}
+                                    prefix={<Icon type="lock" style={{color: 'rgba(0,0,0,.25)'}} />}
                                     type="password"></Input>
                                 )
                             }
                         </Item>
                         <Item>
                             <Button htmlType="submit" className="login-form-button" type="primary">登录</Button>
+                        </Item>
+                        <Item>
+                            <a href="#" onClick={this.toRegister}>用户注册</a>
                         </Item>
                     </Form>
                 </section>
