@@ -30,9 +30,8 @@ class Login extends Component{
             if(!err){
                 const {username,password} = value;
                 console.log("用户信息",username,password);
-                let mess = {username,password};
-                const result = await login(mess);
-                if(result.status == 0){
+                const result = await login(username,password);
+                if(result.status === 0){
                     userMessage.user = result.data;
                     storageUtils.setUser(result.data);
                     message.success("登录成功");

@@ -1,4 +1,4 @@
 import ajax from "./ajax";
-export const login = data => {
-    return ajax("/login",data,"post");
+export const login = (username,password) => {
+    return ajax("/login",{username,password},"post");
 }

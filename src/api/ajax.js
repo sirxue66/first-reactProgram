@@ -4,9 +4,9 @@ import { reject, resolve } from "q";
 const ajax = function(url,data={},method="get"){
     return new Promise((resolve,reject) => {
         let promise;
-        if(method == "get"){
+        if(method === "get"){
             promise = Axios.get(url,{pramas:data});
-        } else if(method == "post"){
+        } else if(method === "post"){
             promise = Axios.post(url,data);
         }
         promise.then(response => {
