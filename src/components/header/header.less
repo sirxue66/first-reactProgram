@@ -1,0 +1,56 @@
+.header{
+    height: 100px;
+    .header-top{
+        height: 50px;
+        border-bottom: 1px solid blue;
+        font-size: 16px;
+        text-align: right;
+        padding-right: 20px;
+        span{
+            color: black;
+            font-weight: 500;
+        }
+        .logOut{
+            color: blue;
+            cursor: pointer;
+            margin-left: 10px;
+            font-weight: 500;
+        }
+    }
+    .header-bottom{
+        height: 50px;
+        display: flex;
+        font-size: 17px;
+        font-weight: 600;
+        line-height: 50px;
+        .p-title{
+            font-size: 20px;
+            position: relative;
+            // margin-left: 10%;
+            text-align: center;
+            width: 10%;
+            &::after{
+                content: "";
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+                top: 150%;
+                border-width: 30px;
+                border-style: solid;
+                border-color: white transparent transparent transparent;
+            }
+        }
+        div{
+            width: 90%;
+            text-align: right;
+            span{
+                margin-right: 20px;
+            }
+            img{
+                height: 40px;
+                width: 50px;
+                margin-right: 20px;
+            }
+        }
+    }
+}

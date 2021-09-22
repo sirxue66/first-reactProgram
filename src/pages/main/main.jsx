@@ -4,7 +4,7 @@ import userMessage from "../../utils/userMessage"
 import { Layout } from "antd"
 import LeftNav from "../../components/left-nav/nav"
 import Headers from "../../components/header/header"
-import {BrowserRouter,Switch,Route} from "react-router-dom"
+import {Switch,Route} from "react-router-dom"
 import Home from "../home/index"
 import ProductType from "../productType/index"
 import Product from "../product/index"
@@ -29,7 +29,7 @@ export default class Main extends Component{
                     <LeftNav></LeftNav>
                 </Sider>
                 <Layout>
-                    <Header style={{backgroundColor: "white"}}>
+                    <Header style={{height:"100px",backgroundColor: "white",padding:0}}>
                         <Headers></Headers>
                     </Header>
                     <Content style={{backgroundColor: "#b0b1b000",padding:"30px"}}>
@@ -43,6 +43,7 @@ export default class Main extends Component{
                                 <Route path="/charts/bar" component={Bar}></Route>
                                 <Route path="/charts/line" component={Line}></Route>
                                 <Route path="/charts/pie" component={Pie}></Route>
+                                <Redirect to="/home"></Redirect>
                             </Switch>
                         
                     </Content>

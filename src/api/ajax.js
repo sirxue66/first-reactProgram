@@ -1,6 +1,6 @@
 import Axios from "axios";
 import { message } from "antd";
-import { reject, resolve } from "q";
+// import { reject, resolve } from "q";
 const ajax = function(url,data={},method="get"){
     return new Promise((resolve,reject) => {
         let promise;

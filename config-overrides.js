@@ -9,8 +9,10 @@ module.exports = override(
     // 使用addLessLoader修改antd組件默認主題
     addLessLoader({ 
         lessOptions:{
-            javascriptEnabled: true, 
-            modifyVars: {'@primary-color': '#17d56b'}, 
+            less:{
+                javascriptEnabled: true
+            },
+            modifyVars: {'@primary-color': '#17d56b'}
         }
     }),    
 );
