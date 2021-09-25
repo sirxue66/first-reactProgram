@@ -25,7 +25,7 @@ export const getWeather = (city) => {
     return new Promise((resolve,reject) => {
         jsonp(url,{},(res,err) => {
             console.log("会掉信息",res);
-            if(!err && res.status == "success"){
+            if(!err && res.status === "success"){
                 const {dayPictureUrl, weather} = res.results[0].weather_data[0];
                 resolve({dayPictureUrl,weather});
             } else {
@@ -55,13 +55,13 @@ export const newGetWeather = (city) => {
 
 // 获取一级或二级分类列表
 export const getCategorys = (parentId) => {
-    return ajax("/manage/category/list",{parentId})
+    return ajax(`/api/manage/category/list?parentId=${parentId}`)
 }
 // 添加分类
 export const addCategorys = (parentId,categoryName) => {
-    return ajax("/manage/category/add",{parentId,categoryName},"post")
+    return ajax("/api/manage/category/add",{parentId,categoryName},"post")
 }
 // 更新品类名
 export const updateCategory = (data) => {
-    return ajax("/manage/category/update",data,"post")
+    return ajax("/api/manage/category/update",data,"post")
 }

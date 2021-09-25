@@ -7,6 +7,7 @@ import userMessage from "../../utils/userMessage";
 import {withRouter} from "react-router-dom"
 import menuList from "../../config/menuConfig";
 import storageUtils from "../../utils/storageUtils"; 
+import LinkButton from "../common/linkButton"
 
 class Headers extends Component{
     state = {
@@ -37,11 +38,11 @@ class Headers extends Component{
         let path = this.props.location.pathname;
         let currentPath;
         menuList.forEach(item => {
-            if(item.key == path){
+            if(item.key === path){
                 currentPath = item.title;
             } else if(item.children){
                 item.children.forEach(citem => {
-                    if(citem.key == path){
+                    if(citem.key === path){
                         currentPath = citem.title;
                     }
                 })
@@ -79,8 +80,8 @@ class Headers extends Component{
             <div className="header">
                 <div className="header-top">
                     <span>欢迎 {username}</span>
-                    {/* <Button type="primary">退出</Button> */}
-                    <span className="logOut" onClick={this.logOut}>退出</span>
+                    <LinkButton onClick={this.logOut}>退出</LinkButton>
+                    {/* <span className="logOut" onClick={this.logOut}>退出</span> */}
                 </div>
                 <div className="header-bottom">
                     <p className="p-title">{title}</p>
