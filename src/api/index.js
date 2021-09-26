@@ -62,6 +62,6 @@ export const addCategorys = (parentId,categoryName) => {
     return ajax("/api/manage/category/add",{parentId,categoryName},"post")
 }
 // 更新品类名
-export const updateCategory = (data) => {
-    return ajax("/api/manage/category/update",data,"post")
+export const updateCategory = ({categoryId,categoryName}) => {
+    return ajax("/api/manage/category/update",{categoryId,categoryName},"post")
 }

@@ -1,8 +1,9 @@
 import React,{Component} from "react"
 import "./index.less"
-import {Card,Table,Icon,Message,Model, Modal} from "antd"
+import {Card,Table,Icon,Message, Modal} from "antd"
 import LinkButton from "../../components/common/linkButton"
 import AddForm from "./addForm"
+import UpdateForm from "./updateForm"
 import {getCategorys,addCategorys,updateCategory} from "../../api/index"
 class ProductType extends Component{
     state = {
@@ -61,36 +62,57 @@ class ProductType extends Component{
             showType:1
         });
     }
-    showUpdate = () => {
+    showUpdate = (category) => {
         this.setState({
             showType:2
         });
+        // 将拿到的当前行数据存入this上的currentCategory中
+        this.currentCategory = category;
     }
     // 关闭弹窗
     closeModal = () => {
         this.setState({
             showType:0
         });
+        // 清空form表单的缓存数据，保证打开input都为空
+        this.form.resetFields();
     }
     // 添加品类
     addProducts = async() => {
-        const {parentId,categoryName} = this.props.form
-        const resule = await addCategorys({parentId,categoryName});
-        if(result.code === "0"){
-            this.state({
+        const {parentId,categoryName} = this.form.getFieldsValue();
+        const result = await addCategorys(parentId,categoryName);
+        if(result.status === 0){
+            this.setState({
                 showType:0
             });
-            this.form.resetFilds();
+            this.form.resetFields();
             if(parentId === "0"){
-                this.getDatas();
+                this.getDatas("0");
             } else {
-                this.getSubDatas();
+                this.getDatas(parentId);
             }
+            Message.success("添加成功")
+        } else {
+            Message.error("添加失败")
         }
     }
     // 修改品类
-    updateProduct = () => {
-
+    updateProduct = async() => {
+        const {categoryName} = this.form.getFieldsValue();
+        const categoryId = this.currentCategory._id;
+        console.log(categoryId,categoryName,'555555555');
+        // debugger
+        const results = await updateCategory({categoryId,categoryName})
+        if(results.status === 0){
+            this.setState({
+                showType:0
+            });
+            this.form.resetFields();
+            this.getDatas();
+            Message.success("修改成功")
+        } else{
+            Message.error("修改失败")
+        }
     }
 
     componentDidMount(){
@@ -103,7 +125,7 @@ class ProductType extends Component{
             { title: '操作', width:200, render:(category)=>{
                 return(
                     <span>
-                         <LinkButton onClick={this.showUpdate}>修改品类</LinkButton>&nbsp;&nbsp;&nbsp;
+                         <LinkButton onClick={()=>{this.showUpdate(category)}}>修改品类</LinkButton>&nbsp;&nbsp;&nbsp;
                         {this.state.parentId === "0" ? <LinkButton onClick={()=>{this.getSubDatas(category)}}>查看</LinkButton> : null}
                     </span>
                    
@@ -126,6 +148,8 @@ class ProductType extends Component{
             添加
             </LinkButton>
         )
+            // 修改数据的品类回显
+        const categoryName = this.currentCategory|| {}
         return(
             <Card title={title} extra={addArea} >
                 <Table
@@ -147,10 +171,10 @@ class ProductType extends Component{
                 cancelText="取消"
                 >
                     <AddForm
-                    categorys:category
-                    parentId:parentId
+                    categorys={oneCategorys}
+                    parentId={parentId}
                     setForm={form => this.form = form}   //将子组件传过来的参数赋值到this上的form
-                    ></AddForm>
+                    />
                 </Modal>
                 {/* 修改品类 */}
                 <Modal
@@ -161,7 +185,10 @@ class ProductType extends Component{
                 okText="确定"
                 cancelText="取消"
                 >
-                    <h1>修改品类名称</h1>
+                    <UpdateForm
+                    categoryName={categoryName.name}
+                    setForm={form => this.form = form}
+                    ></UpdateForm>
                 </Modal>
             </Card>
         )

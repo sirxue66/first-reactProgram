@@ -7,37 +7,39 @@ const Option = Select.Option
 
 class AddForm extends Component {
     static propTypes = {
-        categroys:propTypes.array.isRequired,
+        categorys:propTypes.array.isRequired,
         parentId:propTypes.string.isRequired,
         setForm:propTypes.func.isRequired   //子组件调用函数向父组件传值
     }
 
-    componentWillMounted(){
+    componentDidMount(){
+        // console.log(this.props.form.getFieldsValue(),"555555")
         // 将子组件表数据form对象通过函数形式传给父组件
         this.props.setForm(this.props.form);
+        
     }
     render() {
-        const {getFiledDecorator} = this.props.form
-        const {categroys,parentId} = this.props
+        const {getFieldDecorator} = this.props.form
+        const {categorys,parentId} = this.props
         return(
             <Form>
                 <Item label="所属品类">
                     {
-                        getFiledDecorator("parentId",
+                        getFieldDecorator   ("parentId",
                             {initialValue:parentId}
                         )(
-                            <Stlect>
+                            <Select>
                                 <Option key="0" value="0">一级分类</Option>
                                 {
-                                    categroys.map(item => <Option key={item._id} value={item._id}>{item.name}</Option>)    
+                                    categorys.map(item => <Option key={item._id} value={item._id}>{item.name}</Option>)    
                                 }
-                            </Stlect>
+                            </Select>
                         )
                     }
                 </Item>
                 <Item label="品类名称">
                     {
-                        getFiledDecorator("categoryName",{
+                        getFieldDecorator("categoryName",{
                             initialValue:"",
                             rules:[
                                 {required:true,whitespace:true,message:"请输入品类名称！"}
@@ -52,4 +54,4 @@ class AddForm extends Component {
     }
 }
 
-export default Form.create(AddForm) 
+export default AddForm = Form.create()(AddForm) 
