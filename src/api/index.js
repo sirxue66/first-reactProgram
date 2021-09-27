@@ -65,3 +65,22 @@ export const addCategorys = (parentId,categoryName) => {
 export const updateCategory = ({categoryId,categoryName}) => {
     return ajax("/api/manage/category/update",{categoryId,categoryName},"post")
 }
+
+// 根据ID获取分类
+export const getTypeById = (categoryId) => ajax("/api/manage/category/info",{categoryId})
+// 获取商品分页列表
+export const productsList = (pageNum,pageSize) => ajax("/api/manage/product/list",{pageNum,pageSize}) 
+// 根据ID、name搜索产品列表
+export const getListByIdOrName = ({pageNum,pageSize,searchType,searchName}) => {
+    return ajax("/api/manage/product/search",{pageNum,pageSize,[searchType]:searchName})
+}
+// 添加、更新商品
+export const upadteProduct = (product) => {
+    return ajax("/api/manage/product/"+(product._id ? "update" : "add"),product,"post")
+}
+// 商品上架、下架操作
+export const changeProductStatus = (productId,status) => {
+    return ajax("/api/manage/product/updateStatus",{productId,status},"post")
+}
+// 删除图片
+export const deleteImg = (name) => ajax("/api/manage/img/delete",{name},"post")
