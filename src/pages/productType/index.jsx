@@ -158,7 +158,7 @@ class ProductType extends Component{
                 loading={isLoading}
                 dataSource={parentId === "0" ? oneCategorys : twoCategorys}
                 columns={this.columns}
-                pagination={{pageSize: 8, showQuickJumper: true, showSizeChanger: true}}
+                pagination={{pageSize: 8, showQuickJumper: true, showSizeChanger: true}}  //使用的是前端分页
                 ></Table>
 
                 {/* 添加品类 */}

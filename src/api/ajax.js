@@ -5,7 +5,7 @@ const ajax = function(url,data={},method="get"){
     return new Promise((resolve,reject) => {
         let promise;
         if(method === "get"){
-            promise = Axios.get(url,{pramas:data});
+            promise = Axios.get(url,{params:data});
         } else if(method === "post"){
             promise = Axios.post(url,data);
         }
