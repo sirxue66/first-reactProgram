@@ -12,7 +12,7 @@ class ProductHome extends Component{
         productsList:[],
         total:0,   //总数
         searchKey:"",  //搜索关键子
-        searchType:"productName"    //搜索类型  productName/productDesc
+        searchType:"productName"    //搜索类型  productName/productDesc  默认productName
      }
      getProductList = async(pageNum) => {
          this.currentPage = pageNum;     //将当前页数保存到this中，供后续使用
@@ -24,7 +24,7 @@ class ProductHome extends Component{
              isLoading:false
          });
          if(result.status === 0){
-             const {total,list} = result.data
+            const {total,list} = result.data
             this.setState({
                 total:total,
                 productsList:list
@@ -32,6 +32,26 @@ class ProductHome extends Component{
          }
      }
 
+    //  获取搜索列表
+    getSearchList = async(pageNum) => {
+        this.setState({
+            isLoading:true
+        });
+        let {searchType,searchKey} = this.state;
+        // console.log(pageNum,searchType,searchKey)
+        const result = await getListByIdOrName({pageNum,pageSize:PAGE_SIZE,searchType,searchName:searchKey});
+        this.setState({
+            isLoading:false
+        });
+        if(result.status === 0){
+            const {total,list} = result.data
+            this.setState({
+                total:total,
+                productsList:list
+            });
+        }
+    }
+    
      updateStatus = async(productId,status) => {
         const result = await changeProductStatus(productId,status);
         if(result.status === 0){
@@ -99,6 +119,11 @@ class ProductHome extends Component{
             }
         ]
      }
+    //  清空搜索
+    clearSearch = () => {
+        this.getProductList(1);
+        this.searchInput.current.setValue("");
+    }
 
     componentWillMount(){
         //初始化columns数据
@@ -106,21 +131,37 @@ class ProductHome extends Component{
     }
     componentDidMount(){
         this.getProductList(1);
+        // 获取搜索框input的DOM
+        this.searchInput = React.createRef();
     }
     render(){
-        const {productsList,isLoading,total} = this.state
-
-
+        const {productsList,isLoading,total,searchType} = this.state
+        
         const title = (
             <span>
-                <Select style={{width:"150px",marginRight:"10px"}}>
-                    <Option value="0">11</Option>
-                    <Option value="0">22</Option>
+                <Select 
+                value={searchType} 
+                style={{width:"150px",marginRight:"10px"}}
+                onChange={(value) => {this.setState({searchType:value})}}
+                >
+                    <Option value="productName" key="productName">按名称搜索</Option>
+                    <Option value="productDesc" key="productDesc">按描述搜索</Option>
                 </Select>
-                <Input style={{width:"150px",marginRight:"10px"}} placeholder="请输入关键字"></Input>
-                <Button type="primary">
+                <Input 
+                ref={this.searchInput}
+                style={{width:"150px",marginRight:"10px"}} 
+                placeholder="请输入关键字"
+                onChange={(e) => {
+                    this.setState({searchKey:e.target.value})
+                }}
+                ></Input>
+                <Button style={{marginRight:"10px"}} type="primary" onClick={() => this.getSearchList(1)}>
                     <Icon type="search"></Icon>
                     搜索
+                </Button>
+                <Button type="primary" onClick={this.clearSearch}>
+                    <Icon type="delete"></Icon>
+                    清空
                 </Button>
             </span>
         )
@@ -135,6 +176,7 @@ class ProductHome extends Component{
             <Card title={title} extra={addArea}>
                 <Table
                 bordered
+                rowKey="_id"
                 dataSource={productsList}
                 columns={this.columns}
                 loading={isLoading}
