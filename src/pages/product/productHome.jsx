@@ -60,10 +60,10 @@ class ProductHome extends Component{
      }
 
      toDetail = (product) => {
-        this.props.history.replace("/product/detail",product);
+        this.props.history.push("/product/detail",product);
      }
      toAdd = (product) => {
-        this.props.history.replace("/product/add",product);
+        this.props.history.push("/product/add",product);
      }
 
      initColumns = () => {

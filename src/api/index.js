@@ -66,7 +66,7 @@ export const updateCategory = ({categoryId,categoryName}) => {
     return ajax("/api/manage/category/update",{categoryId,categoryName},"post")
 }
 
-// 根据ID获取详情信息
+// 根据ID获取分类名称
 export const getTypeById = (categoryId) => ajax("/api/manage/category/info",{categoryId})
 // 获取商品分页列表
 export const productsList = (pageNum,pageSize) => ajax("/api/manage/product/list",{pageNum,pageSize}) 

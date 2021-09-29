@@ -7,8 +7,8 @@ class ProductAdd extends Component{
     render(){
         const title = (
             <span>
-                <Icon type="arrow-left"></Icon>
-                <LinkButton onClick={() => this.props.history.replace("/product")}>返回</LinkButton>
+                <Icon type="arrow-left" style={{color:"green"}}></Icon>
+                <LinkButton onClick={() => this.props.history.goBack()}>返回</LinkButton>
             </span>
         )
         const extra = (

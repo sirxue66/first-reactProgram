@@ -3,6 +3,8 @@ import {Switch,Route,Redirect} from "react-router-dom"
 import ProductHome from "./productHome"
 import ProductAdd from "./productAdd"
 import ProductDetail from "./productDetail"
+// 子路由、子标签的样式也可以写在这一个less中
+import "./index.less"
 
 class Product extends Component{
     render(){
