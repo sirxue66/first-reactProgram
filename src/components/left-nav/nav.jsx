@@ -81,9 +81,12 @@ class Nav extends Component{
         this.navNodes = this.getMenuNodes(menuList);
     }
     render(){
-        const path = this.props.location.pathname;
-        const openkey = this.openkey;
-        // console.log(openkey);
+        let path = this.props.location.pathname;
+        let openkey = this.openkey;
+        // console.log(path);
+        if(path.indexOf("/product") !== -1){
+            path = "/product"
+        }
         return(
             <div>
                 <Link to="/" className="nav-header">

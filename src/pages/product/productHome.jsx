@@ -1,6 +1,6 @@
 import React,{Component} from "react"
 import {Card,Table,Select,Button,Icon,Input} from "antd"
-import { Link,withRouter } from "react-router-dom"
+// import { Link,withRouter } from "react-router-dom"
 import LinkButton from "../../components/common/linkButton"
 import { PAGE_SIZE } from "../../utils/variableGlobal"
 import {productsList,getListByIdOrName,changeProductStatus} from "../../api/index"
@@ -191,4 +191,4 @@ class ProductHome extends Component{
         )
     }
 }
-export default withRouter(ProductHome)
+export default ProductHome
