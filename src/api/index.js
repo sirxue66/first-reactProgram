@@ -24,7 +24,6 @@ export const getWeather = (city) => {
     const url = `http://api.map.baidu.com/telematics/v3/weather?location=${city}&output=json&ak=FK9mkfdQsloEngodbFl4FeY3`;
     return new Promise((resolve,reject) => {
         jsonp(url,{},(res,err) => {
-            console.log("会掉信息",res);
             if(!err && res.status === "success"){
                 const {dayPictureUrl, weather} = res.results[0].weather_data[0];
                 resolve({dayPictureUrl,weather});
@@ -35,6 +34,12 @@ export const getWeather = (city) => {
         })
     })
 }
+
+// 获取疫情数据的请求
+export const getMapData = () => {
+    const url = "https://news.sina.com.cn/project/fymap/ncp2020_full_data.json?_=1633792479316";
+}
+
 // 新的获取天气接口
 export const newGetWeather = (city) => {
     const newUrl = `http://www.tianqiapi.com/api?version=v1&appid=23035354&appsecret=8YvlPNrz&id=${city}`;
