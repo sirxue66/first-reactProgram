@@ -32,7 +32,7 @@ export default class Main extends Component{
                     <Header style={{height:"100px",backgroundColor: "white",padding:0}}>
                         <Headers></Headers>
                     </Header>
-                    <Content style={{backgroundColor: "#b0b1b000",padding:"30px"}}>
+                    <Content style={{backgroundColor: "#b0b1b000",padding:"30px 30px",minHeight:"100%"}}>
                        
                             <Switch>
                                 <Route path="/home" component={Home}></Route>
@@ -45,7 +45,7 @@ export default class Main extends Component{
                                 <Route path="/charts/pie" component={Pie}></Route>
                                 <Redirect to="/home"></Redirect>
                             </Switch>
-                        
+            
                     </Content>
                     <Footer style={{backgroundColor: "rgb(221 222 221)",textAlign:"center",color:"gray"}}>
                         推荐使用谷歌浏览器打开来达到最佳效果!

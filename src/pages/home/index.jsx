@@ -12,7 +12,7 @@ class Home extends Component{
             title:{    //标题
                 text:"全国疫情地图",
                 link:"https://news.sina.cn/zt_d/yiqing0121",
-                textStyle:{color:"black"},
+                textStyle:{color:"red"},
                 subtext:"React框架开发",
                 sublink:"https://github.com/sirxue66/first-reactProgram",
                 subtextStyle:{
@@ -32,16 +32,22 @@ class Home extends Component{
                     },
                     itemStyle:{    //板块区域的样式
                         areaColor:"yellow",
-                        // borderColor:"green"
+                        borderColor:"blue",
+                        shadowOffsetX:0,
+                        shadowOffsetY:0,
+                        shadowBlur:5,
+                        shadowColor:"red"
                     },
                     emphasis:{        //控制鼠标划过的样式
                         label:{
                             show:true,
-                            color:"green",
+                            color:"red",
                             fontSize:18
                         },
                         itemStyle:{
-                            areaColor:"orange"
+                            areaColor:"rgb(189 55 245 / 65%)",
+                            borderColor:"red",
+                            borderWidth:2
                         },
                     },  
                     zoom:1.2,      //控制地图的放大缩小倍数
@@ -63,10 +69,14 @@ class Home extends Component{
                     showLabel:true,
                     inRange:{
                         symbol:"rect",
-                        color:["white","red"]
+                        color:["blue","red"],
+                        hoverLink:true
                     },
                     itemWidth:18,
-                    itemHeight:12
+                    itemHeight:12,
+                    textStyle:{
+                        color:"red"
+                    }
                 }
             ],
             tooltip:{
@@ -111,9 +121,15 @@ class Home extends Component{
             <div className="mainBackground">
                 <div className="main-title">全国疫情数据实时监控</div>
                 <div className="main-map">
-                    <div className="charts"></div>
+                    <div className="charts">
+                        <div className="chart-one"></div>
+                        <div className="chart-two"></div>
+                    </div>
                     <div className="map" id="chain-map"></div>
-                    <div className="charts"></div>
+                    <div className="charts">
+                        <div className="chart-one"></div>
+                        <div className="chart-two"></div>
+                    </div>
                 </div>
             </div>
         )
