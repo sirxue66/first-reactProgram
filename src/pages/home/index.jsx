@@ -1,13 +1,12 @@
 import React,{Component} from "react"
 import "./index.less"
-import ReactEcharts from "echarts-for-react"
 import Echars from "echarts"
 import "echarts/map/js/china"
 import jsonp from "jsonp"
 import {message} from "antd"
 
 class Home extends Component{
-    getOptions(numList){
+    getMapOptions(numList){
         let options = {
             title:{    //标题
                 text:"全国疫情地图",
@@ -87,12 +86,126 @@ class Home extends Component{
         return options
     }
 
+    getPieOptionOne(dataList){
+        let options = {
+            title:{               //标题
+                text:"境外输入各省占比",
+                subtext:"Top10",
+                left:"center",
+                textStyle: {
+                    color:"red",
+                    fontSize:15,
+                    fontWeight:500
+                }
+            },
+            tooltip:{    
+                show:true,         //提示框
+                trigger:"item",
+                backgroundColor:"rgba(50,50,50,0.7)"
+            },
+            legend:{               //图例
+                type:"scroll",
+                bottom:2,
+                textStyle:{
+                    color:"red"
+                }
+            },
+            series:[
+                {
+                    name:"境外占比",
+                    type:"pie",
+                    radius:[0,"50%"],    //饼图的半径
+                    data:dataList,
+                    colorBy:"data",     //按数据区分颜色
+                    itemStyle: {
+                        // color:"green",
+                        borderWidth:2,
+                        borderColor:"blue",
+                        shadowOffsetX:0,
+                        shadowOffsetY:0,
+                        shadowBlur:5,
+                        shadowColor:"red"
+                    },
+                    emphasis: {
+                        scale:true,      //开启高亮放大
+                        focus:"series",        //高亮聚焦
+                        itemStyle: {
+                            borderColor:"red",
+                            borderWidth:2,
+                            shadowOffsetX:0,
+                            shadowOffsetY:0,
+                            shadowBlur:5,
+                            shadowColor:"blue"
+                        }
+                    }
+                }
+            ]
+        }
+        return options;
+    }
+
+    getBarOptionOne(){
+        let options = {
+            title:{
+                text:"最新疫情实况",
+                subtext:"实时跟进",
+                left:"center",
+                textStyle: {
+                    color:"red",
+                    fontSize:15,
+                    fontWeight:500
+                }
+            },
+            tooltip:{
+                show:true,
+                blur:"axis",
+                backgroundColor:"rgba(50,50,50,0.7)"
+            },
+            toolbox: {            //工具栏
+                show: true,
+                feature: {
+                  dataView: { show: true, readOnly: true },       //显示视图数据，只读
+                  magicType: { show: true, type: ['line', 'bar'] },         //图形切换
+                  restore: { show: true },         
+                  saveAsImage: { show: true }   //保存图片
+                }
+              },
+              xAxis:[
+                {
+                    show:true,
+                    nameTextStyle:{
+                        color:"red",
+                        fontSize:15,
+                        fontWeight:500
+                    },
+                    data:["现存确诊","现存疑似","现存无症状"]
+                }
+              ],
+              yAxis:[
+                {
+                    show:true,
+                    
+                }
+              ]
+        }
+        return options;
+    }
+
     getMapdata = () => {
         const url = "https://news.sina.com.cn/project/fymap/ncp2020_full_data.json?_=1633792479316&callbak=jsoncallback";
         jsonp(url);
         window.jsoncallback = (value) => {
             if(value.status.code === 0){
-                // console.log("数据",value);
+                console.log("数据",value);
+                let {jwsrTop} = value.data;
+                let onePieList = jwsrTop.map(citem => {
+                    return {
+                        name:citem.name,
+                        value:citem.jwsrNum
+                    }
+                })
+                this.makeChartOne(onePieList);
+
                 let numList = value.data.list;
                 let optionList = numList.map(item => {
                     return {
@@ -100,15 +213,21 @@ class Home extends Component{
                         value:item.value
                     }
                 });
-                let options = this.getOptions(optionList);
+                let options = this.getMapOptions(optionList);
                 let echarts = Echars.init(document.querySelector("#chain-map"));
                 echarts.setOption(options);
             } else {
                 message.error("疫情数据获取失败，请稍候重试！");
                 let echarts = Echars.init(document.querySelector("#chain-map"));
-                echarts.setOption(this.getOptions());
+                echarts.setOption(this.getMapOptions());
             }
         }
+    }
+
+    makeChartOne = (list) => {
+        let option = this.getPieOptionOne(list);
+        let echars = Echars.init(document.querySelector("#chart-one"));
+        echars.setOption(option);
     }
 
     componentDidMount(){
@@ -122,7 +241,7 @@ class Home extends Component{
                 <div className="main-title">全国疫情数据实时监控</div>
                 <div className="main-map">
                     <div className="charts">
-                        <div className="chart-one"></div>
+                        <div className="chart-one" id="chart-one"></div>
                         <div className="chart-two"></div>
                     </div>
                     <div className="map" id="chain-map"></div>
