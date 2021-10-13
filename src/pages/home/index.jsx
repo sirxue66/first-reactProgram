@@ -1,6 +1,6 @@
 import React,{Component} from "react"
 import "./index.less"
-import Echars from "echarts"
+import * as Echars from "echarts"
 import "echarts/map/js/china"
 import jsonp from "jsonp"
 import {message} from "antd"
@@ -129,6 +129,9 @@ class Home extends Component{
                     emphasis: {
                         scale:true,      //开启高亮放大
                         focus:"series",        //高亮聚焦
+                        shadowBlur: 10, 
+                        shadowOffsetX: 0, 
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
                         itemStyle: {
                             borderColor:"red",
                             borderWidth:2,
@@ -144,12 +147,12 @@ class Home extends Component{
         return options;
     }
 
-    getBarOptionOne(){
+    getBarOptionOne(dataList){
         let options = {
             title:{
                 text:"最新疫情实况",
                 subtext:"实时跟进",
-                left:"center",
+                left:"left",
                 textStyle: {
                     color:"red",
                     fontSize:15,
@@ -184,8 +187,16 @@ class Home extends Component{
               yAxis:[
                 {
                     show:true,
-                    
+                    type:"value"
                 }
+              ],
+              series:[
+                  {
+                      name:"人数",
+                      type:"bar",
+                      data: dataList,
+                      barWidth:30
+                  }
               ]
         }
         return options;
@@ -197,6 +208,7 @@ class Home extends Component{
         window.jsoncallback = (value) => {
             if(value.status.code === 0){
                 console.log("数据",value);
+                // 境外输入top10
                 let {jwsrTop} = value.data;
                 let onePieList = jwsrTop.map(citem => {
                     return {
@@ -205,7 +217,11 @@ class Home extends Component{
                     }
                 })
                 this.makeChartOne(onePieList);
-
+                // 现存病例数据
+                let {econNum,asymptomNum,sustotal} = value.data;
+                let nowData = [econNum,asymptomNum,sustotal];
+                this.makeChartTwo(nowData);
+                // 地图数据源
                 let numList = value.data.list;
                 let optionList = numList.map(item => {
                     return {
@@ -230,6 +246,12 @@ class Home extends Component{
         echars.setOption(option);
     }
 
+    makeChartTwo = (list) => {
+        let option = this.getBarOptionOne(list);
+        let echars = Echars.init(document.querySelector("#chart-two"));
+        echars.setOption(option);
+    }
+
     componentDidMount(){
         // this.echarts = Echars.init(document.querySelector("#chain-map"));
         // this.echarts.setOption(this.getOptions());
@@ -242,12 +264,12 @@ class Home extends Component{
                 <div className="main-map">
                     <div className="charts">
                         <div className="chart-one" id="chart-one"></div>
-                        <div className="chart-two"></div>
+                        <div className="chart-two" id="chart-two"></div>
                     </div>
                     <div className="map" id="chain-map"></div>
                     <div className="charts">
-                        <div className="chart-one"></div>
-                        <div className="chart-two"></div>
+                        <div className="chart-one" id="chart-three"></div>
+                        <div className="chart-two" id="chart-four"></div>
                     </div>
                 </div>
             </div>
