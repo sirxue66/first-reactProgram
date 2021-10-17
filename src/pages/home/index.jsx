@@ -147,6 +147,68 @@ class Home extends Component{
         return options;
     }
 
+    getPieOptionTwo(dataList){
+        let options = {
+            title:{               //标题
+                text:"全国现有确诊构成",
+                left:"center",
+                textStyle: {
+                    color:"red",
+                    fontSize:15,
+                    fontWeight:500
+                }
+            },
+            tooltip:{    
+                show:true,         //提示框
+                trigger:"item",
+                backgroundColor:"rgba(50,50,50,0.7)"
+            },
+            legend:{               //图例
+                orient:"vertical",
+                left:"left",
+                bottom:5,
+                textStyle:{
+                    color:"red"
+                }
+            },
+            series:[
+                {
+                    name:"构成占比",
+                    type:"pie",
+                    radius:["30%","50%"],    //饼图的半径
+                    avoidLabelOverlap: false,
+                    data: dataList,
+                    colorBy:"data",     //按数据区分颜色
+                    itemStyle: {
+                        // color:"green",
+                        borderWidth:2,
+                        borderColor:"blue",
+                        shadowOffsetX:0,
+                        shadowOffsetY:0,
+                        shadowBlur:5,
+                        shadowColor:"red"
+                    },
+                    emphasis: {
+                        scale:true,      //开启高亮放大
+                        focus:"series",        //高亮聚焦
+                        shadowBlur: 10, 
+                        shadowOffsetX: 0, 
+                        shadowColor: 'rgba(0, 0, 0, 0.5)',
+                        itemStyle: {
+                            borderColor:"red",
+                            borderWidth:2,
+                            shadowOffsetX:0,
+                            shadowOffsetY:0,
+                            shadowBlur:5,
+                            shadowColor:"blue"
+                        }
+                    }
+                }
+            ]
+        }
+        return options;
+    }
+
     getBarOptionOne(dataList){
         let options = {
             title:{
@@ -181,13 +243,19 @@ class Home extends Component{
                         fontSize:15,
                         fontWeight:500
                     },
-                    data:["现存确诊","现存疑似","现存无症状"]
+                    data:["现存确诊","现存疑似","现存无症状"],
+                    axisLabel:{
+                        color:"red"
+                    }
                 }
               ],
               yAxis:[
                 {
                     show:true,
-                    type:"value"
+                    type:"value",
+                    axisLabel:{
+                        color:"red"
+                    }
                 }
               ],
               series:[
@@ -195,11 +263,99 @@ class Home extends Component{
                       name:"人数",
                       type:"bar",
                       data: dataList,
-                      barWidth:30
+                      colorBy:"data",
+                      barWidth:30,
+                      markPoint: {
+                        data: [
+                          { type: 'max', name: 'Max' },
+                          { type: 'min', name: 'Min' }
+                        ]
+                      },
+                      itemStyle: {
+                        borderWidth:2,
+                        borderColor:"blue",
+                        shadowOffsetX:0,
+                        shadowOffsetY:0,
+                        shadowBlur:5,
+                        shadowColor:"red"
+                    }
                   }
               ]
         }
         return options;
+    }
+
+    getLineOptionOne = () => {
+        let option = {
+            title: {
+              text: 'Top5数据',
+              left:"center",
+              bottom:-10,
+              textStyle: {
+                    color:"red",
+                    fontSize:15,
+                    fontWeight:500
+                }
+            },
+            legend: {
+                left:"center",
+                data: ['Uk', 'America', 'France', 'Italy', 'Canade'],
+                textStyle:{
+                    color:"red"
+                }
+            },
+            grid: {
+                bottom: 0,
+                containLabel: false
+              },
+            xAxis: {
+              type : 'category',
+              data: ['June', 'Junly', 'August', 'September', 'October'],
+              nameTextStyle:{
+                    color:"red",
+                    fontSize:15,
+                    fontWeight:500
+                },
+              axisLabel:{
+                    color:"red",
+                    interval:0
+                }
+            },
+            yAxis: {
+              type: 'category',
+              axisLabel:{
+                color:"red"
+            }
+            },
+            series: [
+              {
+                name: 'Uk',
+                type: 'line',
+                data: [3400,6800,2100,7900,1000]
+              },
+              {
+                name: 'America',
+                type: 'line',
+                data: [8900,3200,5800,2800,9000]
+              },
+              {
+                name: 'France',
+                type: 'line',
+                data: [2800,2600,8700,5600,2400]
+              },
+              {
+                name: 'Italy',
+                type: 'line',
+                data: [8800,6900,5500,1200,6400]
+              },
+              {
+                name: 'Canade',
+                type: 'line',
+                data: [5000,6000,8000,2500,4890]
+              }
+            ]
+          };
+          return option;
     }
 
     getMapdata = () => {
@@ -219,8 +375,16 @@ class Home extends Component{
                 this.makeChartOne(onePieList);
                 // 现存病例数据
                 let {econNum,asymptomNum,sustotal} = value.data;
-                let nowData = [econNum,asymptomNum,sustotal];
-                this.makeChartTwo(nowData);
+                let oneBarList = [econNum,asymptomNum,sustotal];
+                this.makeChartTwo(oneBarList);
+                // 全国现存病例占比
+                let {cn_gat_econNum,cn_current_jwsrNum,cn_province_econNum} = value.data.currenteconinfo;
+                let twoPieList = [
+                    {name:"港澳台病例", value:cn_gat_econNum},
+                    {name:"境外输入病例", value:cn_current_jwsrNum},
+                    {name:"31省本土病例", value:cn_province_econNum}
+                ]
+                this.makeChartThree(twoPieList);
                 // 地图数据源
                 let numList = value.data.list;
                 let optionList = numList.map(item => {
@@ -252,10 +416,23 @@ class Home extends Component{
         echars.setOption(option);
     }
 
+    makeChartThree = (list) => {
+        let option = this.getPieOptionTwo(list);
+        let echars = Echars.init(document.querySelector("#chart-three"));
+        echars.setOption(option);
+    }
+
+    makeChartFour = () => {
+        let option = this.getLineOptionOne();
+        let echars = Echars.init(document.querySelector("#chart-four"));
+        echars.setOption(option);
+    }
+
     componentDidMount(){
         // this.echarts = Echars.init(document.querySelector("#chain-map"));
         // this.echarts.setOption(this.getOptions());
         this.getMapdata();
+        this.makeChartFour();
     }
     render(){
         return(
