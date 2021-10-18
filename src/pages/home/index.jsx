@@ -118,7 +118,6 @@ class Home extends Component{
                     data:dataList,
                     colorBy:"data",     //按数据区分颜色
                     itemStyle: {
-                        // color:"green",
                         borderWidth:2,
                         borderColor:"blue",
                         shadowOffsetX:0,
@@ -235,6 +234,9 @@ class Home extends Component{
                   saveAsImage: { show: true }   //保存图片
                 }
               },
+              grid:{
+                left:50
+            },
               xAxis:[
                 {
                     show:true,
@@ -245,7 +247,8 @@ class Home extends Component{
                     },
                     data:["现存确诊","现存疑似","现存无症状"],
                     axisLabel:{
-                        color:"red"
+                        color:"red",
+                        interval:0
                     }
                 }
               ],
@@ -285,78 +288,122 @@ class Home extends Component{
         return options;
     }
 
-    getLineOptionOne = () => {
-        let option = {
-            title: {
-              text: 'Top5数据',
-              left:"center",
-              bottom:-10,
-              textStyle: {
+    getLineOptionOne(dataList){
+        let options = {
+            title:{
+                text:"最新疫情实况",
+                subtext:"实时跟进",
+                left:"left",
+                textStyle: {
                     color:"red",
                     fontSize:15,
                     fontWeight:500
                 }
             },
-            legend: {
-                left:"center",
-                data: ['Uk', 'America', 'France', 'Italy', 'Canade'],
-                textStyle:{
-                    color:"red"
+            tooltip:{
+                show:true,
+                blur:"axis",
+                backgroundColor: "rgba(50,50,50,0.7)"
+            },
+            grid:{
+                left:50
+            },
+              xAxis:[
+                {
+                    show:true,
+                    nameTextStyle:{
+                        color:"red",
+                        fontSize:15,
+                        fontWeight:500
+                    },
+                    data:["现存确诊","现存疑似","现存无症状"],
+                    axisLabel:{
+                        color:"red",
+                        interval:0
+                    }
                 }
-            },
-            grid: {
-                bottom: 0,
-                containLabel: false
-              },
-            xAxis: {
-              type : 'category',
-              data: ['June', 'Junly', 'August', 'September', 'October'],
-              nameTextStyle:{
-                    color:"red",
-                    fontSize:15,
-                    fontWeight:500
-                },
-              axisLabel:{
-                    color:"red",
-                    interval:0
+              ],
+              yAxis:[
+                {
+                    show:true,
+                    type:"value",
+                    axisLabel:{
+                        color:"red"
+                    }
                 }
-            },
-            yAxis: {
-              type: 'category',
-              axisLabel:{
-                color:"red"
-            }
-            },
-            series: [
-              {
-                name: 'Uk',
-                type: 'line',
-                data: [3400,6800,2100,7900,1000]
-              },
-              {
-                name: 'America',
-                type: 'line',
-                data: [8900,3200,5800,2800,9000]
-              },
-              {
-                name: 'France',
-                type: 'line',
-                data: [2800,2600,8700,5600,2400]
-              },
-              {
-                name: 'Italy',
-                type: 'line',
-                data: [8800,6900,5500,1200,6400]
-              },
-              {
-                name: 'Canade',
-                type: 'line',
-                data: [5000,6000,8000,2500,4890]
-              }
-            ]
-          };
-          return option;
+              ],
+              series:[
+                  {
+                      name:"人数",
+                      type:"line",
+                      data: dataList,
+                      colorBy:"data",
+                      itemStyle: {
+                        borderWidth:2,
+                        borderColor:"blue",
+                        shadowOffsetX:0,
+                        shadowOffsetY:0,
+                        shadowBlur:5,
+                        shadowColor:"red"
+                    }
+                  }
+              ]
+        }
+        return options;
     }
+
+    // getLineOptionOne = () => {
+    //     let option = {
+    //         title: {
+    //           text: '近5个月确诊数据',
+    //           left:"center",
+    //           textStyle: {
+    //                 color:"red",
+    //                 fontSize:15,
+    //                 fontWeight:500
+    //             }
+    //         },
+    //         xAxis: {
+    //           type : 'category',
+    //           data: ['June', 'Junly', 'August', 'September', 'October'],
+    //           nameTextStyle:{
+    //                 color:"red",
+    //                 fontSize:15
+    //             },
+    //           axisLabel:{
+    //                 color:"red",
+    //                 interval:0
+    //             }
+    //         },
+    //         yAxis: {
+    //           type: 'value',
+    //           nameTextStyle:{
+    //                 color:"red",
+    //                 fontSize:15
+    //             },
+    //           axisLabel:{
+    //                 color:"red",
+    //                 interval:0
+    //             }
+    //         },
+    //         series: [
+    //           {
+    //             name: '确诊人数',
+    //             type: 'line',
+    //             data: [40,1980,1080,20,108],
+    //             itemStyle: {
+    //                 borderWidth:2,
+    //                 borderColor:"blue",
+    //                 shadowOffsetX:0,
+    //                 shadowOffsetY:0,
+    //                 shadowBlur:5,
+    //                 shadowColor:"red"
+    //             }
+    //           }
+    //         ]
+    //       };
+    //       return option;
+    // }
 
     getMapdata = () => {
         const url = "https://news.sina.com.cn/project/fymap/ncp2020_full_data.json?_=1633792479316&callbak=jsoncallback";
@@ -385,6 +432,7 @@ class Home extends Component{
                     {name:"31省本土病例", value:cn_province_econNum}
                 ]
                 this.makeChartThree(twoPieList);
+                this.makeChartFour(twoPieList);
                 // 地图数据源
                 let numList = value.data.list;
                 let optionList = numList.map(item => {
@@ -422,17 +470,17 @@ class Home extends Component{
         echars.setOption(option);
     }
 
-    makeChartFour = () => {
-        let option = this.getLineOptionOne();
+    makeChartFour = (list) => {
+        let option = this.getLineOptionOne(list);
         let echars = Echars.init(document.querySelector("#chart-four"));
-        echars.setOption(option);
+        echars.setOption(option);   
     }
 
     componentDidMount(){
         // this.echarts = Echars.init(document.querySelector("#chain-map"));
         // this.echarts.setOption(this.getOptions());
         this.getMapdata();
-        this.makeChartFour();
+        // this.makeChartFour();
     }
     render(){
         return(
