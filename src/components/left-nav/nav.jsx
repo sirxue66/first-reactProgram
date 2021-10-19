@@ -84,7 +84,7 @@ class Nav extends Component{
         let path = this.props.location.pathname;
         let openkey = this.openkey;
         // console.log(path);
-        if(path.indexOf("/product") !== -1){
+        if(path.indexOf("/product/") !== -1){
             path = "/product"
         }
         return(

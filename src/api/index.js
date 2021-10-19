@@ -89,3 +89,10 @@ export const changeProductStatus = (productId,status) => {
 }
 // 删除图片
 export const deleteImg = (name) => ajax("/api/manage/img/delete",{name},"post")
+
+//添加角色
+export const addRole = (roleName) => ajax("/api/manage/role/add",{roleName},"post")
+// 获取角色列表
+export const roleList = () => ajax("/api/manage/role/list")
+// 更新角色
+export const updateRole = (role) => ajax("/api/manage/role/updata",role,"post") 
