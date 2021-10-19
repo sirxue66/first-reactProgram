@@ -14,6 +14,10 @@ class Role extends Component{
         showUpdate:false,
         isLoading:true,    //表格的loading
     }
+    constructor(props){
+        super(props)
+        this.auth = React.createRef()
+    }
 
     initColumns = () => {
         this.columns = [
@@ -96,7 +100,8 @@ class Role extends Component{
     }
     // 更改权限
     updateRole = () => {
-
+        let newMenu = this.auth.current.getMenuToFather();
+        console.log("新权限",newMenu);
     }
     closeModal = () => {
         this.setState({
@@ -156,7 +161,7 @@ class Role extends Component{
                 okText="确定"
                 cancelText="取消"
                 >
-                    
+                    <UpdateRole ref={this.auth} role={role}></UpdateRole>
                 </Modal>
             </Card>
         )
