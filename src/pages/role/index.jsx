@@ -5,6 +5,7 @@ import { ROLE_PAGE_SIZE } from "../../utils/variableGlobal"
 import {formateDate} from "../../utils/handleDate"
 import AddRole from "./add-role"
 import UpdateRole from "./update-role"
+import userMessage from "../../utils/userMessage"
 
 class Role extends Component{
     state = {
@@ -99,9 +100,24 @@ class Role extends Component{
         })
     }
     // 更改权限
-    updateRole = () => {
-        let newMenu = this.auth.current.getMenuToFather();
+    updateRole = async() => {
+        let newMenu = this.auth.current.getMenuToFather();   //获取子组件的更改权限树
         console.log("新权限",newMenu);
+        console.log("原先的权限role",this.state.role);
+        // 将授权信息和授权人添加到参数对象中
+        let nowRole = this.state.role;
+        nowRole.menu = newMenu;
+        nowRole.auth_time = Date.now();   //授权时间
+        nowRole.auth_name = userMessage.user.username;    //授权人
+        // console.log("696969",userMessage.user,Date.now());
+        let results = await updateRole(nowRole);
+        if(results.status === 0){
+            message.success('授权成功！');
+            this.setState({
+                showUpdate: false,
+                role: nowRole
+            });
+        }
     }
     closeModal = () => {
         this.setState({

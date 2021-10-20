@@ -97,6 +97,7 @@ class ProductAdd extends Component{
         if(isUpdate && pCategoryId !== "0"){  //是商品更新并且是二级商品更新
             // 获取对应的二级分类列表
             let subCategorys = await this.getCategorys(pCategoryId);
+            // console.log("二级分类",subCategorys);
             let childOptions = subCategorys.map(item => {
                 return {
                     value: item._id, 
