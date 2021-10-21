@@ -75,11 +75,18 @@ class ProductType extends Component{
             showType:0
         });
         // 清空form表单的缓存数据，保证打开input都为空
-        this.form.resetFields();
+        if(this.form){
+            this.form.resetFields();
+        }
+        if(this.uform){
+            this.uform.resetFields();
+        }
     }
     // 添加品类
     addProducts = async() => {
+        // console.log("分类数据",this.form);
         const {parentId,categoryName} = this.form.getFieldsValue();
+        // console.log("分类数据",parentId,categoryName);
         const result = await addCategorys(parentId,categoryName);
         if(result.status === 0){
             this.setState({
@@ -98,7 +105,7 @@ class ProductType extends Component{
     }
     // 修改品类
     updateProduct = async() => {
-        const {categoryName} = this.form.getFieldsValue();
+        const {categoryName} = this.uform.getFieldsValue();
         const categoryId = this.currentCategory._id;
         console.log(categoryId,categoryName,'555555555');
         // debugger
@@ -107,7 +114,7 @@ class ProductType extends Component{
             this.setState({
                 showType:0
             });
-            this.form.resetFields();
+            this.uform.resetFields();
             this.getDatas();
             Message.success("修改成功")
         } else{
@@ -187,7 +194,7 @@ class ProductType extends Component{
                 >
                     <UpdateForm
                     categoryName={categoryName.name}
-                    setForm={form => this.form = form}
+                    setForm={form => this.uform = form}
                     ></UpdateForm>
                 </Modal>
             </Card>

@@ -97,7 +97,7 @@ export const roleList = () => ajax("/api/manage/role/list")
 // 更新角色
 export const updateRole = (role) => ajax("/api/manage/role/update",role,"post") 
 // 添加或者更新用户
-export const addOrUpdateUser = (user) => ajax("/api/manage/user" + (user._id ? "update" : "add"),user,"post" ) 
+export const addOrUpdateUser = (user) => ajax("/api/manage/user" + (user._id ? "/update" : "/add"),user,"post" ) 
 // 删除用户
 export const deleteUser = (userId) => ajax("/api/manage/user/delete",{userId},"post")
 // 获取用户列表
