@@ -4,6 +4,7 @@ import "./nav.less"
 import logo from "../../assets/img/manage.png"
 import menuList from "../../config/menuConfig"
 import { Menu, Icon } from 'antd';
+import userMessage from "../../utils/userMessage"
 const {SubMenu} = Menu
 class Nav extends Component{
     // 利用数组数据动态生成导航结构  map+递归
@@ -38,44 +39,70 @@ class Nav extends Component{
     // 利用数组数据动态生成导航结构  reduce+递归
     getMenuNodes = (menu) => {
         return menu.reduce((pre,item) => {
-            if(!item.children){
-                pre.push(
-                    (
-                        <Menu.Item key={item.key}>
-                        <Link to={item.key}>
-                        <Icon type={item.icon} />
-                        <span>{item.title}</span>
-                        </Link>
-                        </Menu.Item>
+            // 权限校验通过的item可执行生成导航树
+            if(this.hasAuth(item)){
+                if(!item.children){
+                    pre.push(
+                        (
+                            <Menu.Item key={item.key}>
+                            <Link to={item.key}>
+                            <Icon type={item.icon} />
+                            <span>{item.title}</span>
+                            </Link>
+                            </Menu.Item>
+                        )
                     )
-                )
-            } else {
-                // 解决子菜单选中，不展开的问题
-                const path = this.props.location.pathname;
-                if(item.children.find(citem => path.indexOf(citem.key) === 0)){
-                    this.openkey = item.key;
-                    console.log(this.openkey);
-                    console.log(path);
-                }
-                pre.push(
-                    (
-                        <SubMenu
-                            key={item.key}
-                            title={
-                            <span>
-                                <Icon type={item.icon} />
-                                <span>{item.title}</span>
-                            </span>
-                            }
-                        >
-                            {this.getMenuNodes(item.children)}
-                        </SubMenu>
+                } else {
+                    // 解决子菜单选中，不展开的问题
+                    const path = this.props.location.pathname;
+                    if(item.children.find(citem => path.indexOf(citem.key) === 0)){
+                        this.openkey = item.key;
+                        // console.log(this.openkey);
+                        // console.log(path);
+                    }
+                    pre.push(
+                        (
+                            <SubMenu
+                                key={item.key}
+                                title={
+                                <span>
+                                    <Icon type={item.icon} />
+                                    <span>{item.title}</span>
+                                </span>
+                                }
+                            >
+                                {this.getMenuNodes(item.children)}
+                            </SubMenu>
+                        )
                     )
-                )
+                }   
             }
             return pre;
         },[])
     }
+
+    //进行权限处理
+    // 公共组件都可以看到
+    // admin用户拥有所有权限
+    // 对路由表的路径进行处理，符合条件的生成导航树
+    hasAuth = (menuItem) => {
+        // console.log("当前user",userMessage);
+        let menus = userMessage.user.role.menus;
+        if(menuItem.isPublic || userMessage.user.username === "admin"){
+            return true;
+        } else if(menus.indexOf(menuItem.key) !== -1){       //数组使用indexOf时，必须与数组某一项完全相等时才会匹配到
+            return true;
+        } else if(menuItem.children){
+            let children = menuItem.children.find(item => menus.indexOf(item.key) !== -1)
+            if(children){
+                return true
+            }
+        } else {
+            return false;
+        }
+
+    }
+
     // 为了保证渲染之前获取到openkey，渲染之前需要走一遍函数，才能遍历出openkey的值
     componentWillMount(){
         this.navNodes = this.getMenuNodes(menuList);
@@ -96,8 +123,8 @@ class Nav extends Component{
                 <Menu 
                 mode="inline"
                 theme="dark"
-                selectedKeys={[path]}
-                defaultOpenKeys={[openkey]}
+                selectedKeys={[path]}     //选中的导航栏
+                defaultOpenKeys={[openkey]}     //默认打开的导航栏
                 >
                     {
                         // this.getMenuNodes(menuList)

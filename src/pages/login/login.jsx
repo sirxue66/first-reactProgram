@@ -71,8 +71,7 @@ class Login extends Component{
                                         rules:[
                                             {required:true,whitespace:true,message:"请输入用户名"},
                                             {min:3,message:"用户名不能小于3位"},
-                                            {max:10,message:"用户名不能大于10位"},
-                                            {pattern:/^[a-zA-Z0-9_]+$/,message:"用户名必须由英文、数组或下划线组成"}
+                                            {max:10,message:"用户名不能大于10位"}
                                         ]
                                     }
                                 )(

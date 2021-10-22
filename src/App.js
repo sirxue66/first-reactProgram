@@ -6,6 +6,19 @@ import Register from './pages/register/register'
 import Login from './pages/login/login'
 import Main from './pages/main/main'
 class App extends Component{
+
+    // 完整的生命周期
+        // constructor(){}
+        // componentWillMount(){}
+        // render(){}
+        // componentDidMount(){}
+        // componentWillReceiveProps(){}
+        // shouldComponentUpdate(){}
+        // componentWillUpdate(){}
+        // render(){}
+        // componentDidUpdate(){}
+        // componentWillUnmount(){}
+
     render(){
         return (
             <BrowserRouter>

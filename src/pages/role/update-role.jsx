@@ -12,9 +12,9 @@ class UpdateRole extends Component {
 
     constructor(props){
         super(props)
-        let {menu} = this.props.role
+        let {menus} = this.props.role
         this.state = {
-            checkedKey:menu
+            checkedKey:menus
         }
     }
     // 生成权限树

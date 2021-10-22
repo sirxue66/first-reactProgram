@@ -6,6 +6,7 @@ import {formateDate} from "../../utils/handleDate"
 import AddRole from "./add-role"
 import UpdateRole from "./update-role"
 import userMessage from "../../utils/userMessage"
+import storageUtils from "../../utils/storageUtils"
 
 class Role extends Component{
     state = {
@@ -106,17 +107,27 @@ class Role extends Component{
         console.log("原先的权限role",this.state.role);
         // 将授权信息和授权人添加到参数对象中
         let nowRole = this.state.role;
-        nowRole.menu = newMenu;
+        nowRole.menus = newMenu;
         nowRole.auth_time = Date.now();   //授权时间
         nowRole.auth_name = userMessage.user.username;    //授权人
         // console.log("696969",userMessage.user,Date.now());
         let results = await updateRole(nowRole);
         if(results.status === 0){
-            message.success('授权成功！');
-            this.setState({
-                showUpdate: false,
-                role: nowRole
-            });
+            // 若修改了自己的现在所属角色，将强制退出重新登录以刷新权限
+            // console.log("8888888",nowRole,userMessage.user);
+            // console.log("角色路由",this.props.history);
+            if(nowRole._id === userMessage.user.role_id){
+                message.success('您的权限已经更改，请重新登录以刷新权限！');
+                storageUtils.removeUser();
+                userMessage.user = {};
+                this.props.history.replace("/login");
+            } else {
+                message.success('授权成功！');
+                this.setState({
+                    showUpdate: false,
+                    role: nowRole
+                });
+            }
         }
     }
     closeModal = () => {
