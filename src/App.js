@@ -18,7 +18,13 @@ class App extends Component{
         // render(){}
         // componentDidUpdate(){}
         // componentWillUnmount(){}
-
+    // setState() 更新状态是异步还是同步？
+        // 在react相关回调函数中是 异步执行的  ，例如：生命周期函数，绑定的事件函数等
+        // 在非react回调函数是   同步执行的    ，例如：定时器函数，原生事件回调函数，Promise回调函数中
+        // 、、连续调用多个setState()，使用对象的模式 ，更新state和视图render都会合并，也就是说只会更新一次
+        // 、、连续调用多个setState()，使用函数的模式，更新视图会合并，但是更新state值不会合并，会执行多次setState()函数
+        // 对象模式     setState({name: name1})
+        // 函数模式     setState(state => ({state.name: name1}))
     render(){
         return (
             <BrowserRouter>

@@ -34,6 +34,7 @@ class ProductHome extends Component{
 
     //  获取搜索列表
     getSearchList = async(pageNum) => {
+        this.currentPage = pageNum;
         this.setState({
             isLoading:true
         });
@@ -180,7 +181,9 @@ class ProductHome extends Component{
                 dataSource={productsList}
                 columns={this.columns}
                 loading={isLoading}
-                pagination={{pageSize:PAGE_SIZE,
+                pagination={{
+                    current:this.currentPage,
+                    pageSize:PAGE_SIZE,
                     showQuickJumper:true,
                     showSizeChanger:true,
                     total:total,

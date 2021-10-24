@@ -163,7 +163,13 @@ class Role extends Component{
                 columns={this.columns}    //数据列的数据
                 loading={isLoading}
                 pagination={{pageSize:ROLE_PAGE_SIZE}}
-                rowSelection={{type: 'radio', selectedRowKeys: [role._id]}}    //单选，自动选中role中的_id
+                rowSelection={{
+                    type: 'radio', 
+                    selectedRowKeys: [role._id],
+                    rowSelection: role => {      //点击前边圆圈的回调函数
+                        this.setState({role})
+                    }
+                }}    //单选，自动选中role中的_id
                 onRow={this.onRow}
                 ></Table>
 
