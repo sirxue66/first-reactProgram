@@ -79,7 +79,7 @@ class Headers extends Component{
         return(
             <div className="header">
                 <div className="header-top">
-                    <span>欢迎 {username}</span>
+                    <span>欢迎 {username}</span>&nbsp;&nbsp;&nbsp;
                     <LinkButton onClick={this.logOut}>退出</LinkButton>
                     {/* <span className="logOut" onClick={this.logOut}>退出</span> */}
                 </div>

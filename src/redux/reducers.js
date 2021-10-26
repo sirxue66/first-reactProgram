@@ -1,10 +1,19 @@
 /*
-根据state和action返回新的state
+根据旧的state和 action 返回新的state
 */
 import {combineReducers} from "redux"
+import {INCREMENT, DECREMENT} from "./action-types"
 
 function test(state=0,action){
-    return state;
+    console.log(state);
+    switch (action.type){
+        case INCREMENT:
+            return state + action.value;
+        case DECREMENT:
+            return state - action.value;
+        default:
+            return state 
+    }
 }
 function test01(state=1,action){
     return state;
