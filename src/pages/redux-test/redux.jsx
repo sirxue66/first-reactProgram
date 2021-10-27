@@ -1,5 +1,7 @@
 /*
-这里是对redux 状态管理做的一个练习
+这里是对redux 状态管理做的一个练习，原生redux的使用，没有使用中间件，
+缺点：
+    耦合度太高了，代码不清晰
 */
 
 import React,{Component} from "react"
