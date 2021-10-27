@@ -6,50 +6,43 @@
 
 import React,{Component} from "react"
 import "./redux.less"
-import { Provider } from "react-redux"
-import store from "../../redux/store"
-import { increment, decrement } from "../../redux/actions"
+import PropTypes from "prop-types"
 
 export default class Redux extends Component{
     
-    
+    static propTypes = {
+        count: PropTypes.number.isRequired,
+        increment: PropTypes.func.isRequired,
+        decrement: PropTypes.func.isRequired
+    }
     constructor(props){
         super(props)
         this.currentNum = React.createRef();
-        this.state = {
-            count: store.getState().test
-        };
     }
 
     increment = () => {
         let num = this.currentNum.current.value * 1;
-        store.dispatch(increment(num));
-        this.setState({count: store.getState().test});
+        this.props.increment(num);
     }
     decrement = () => {
         let num = this.currentNum.current.value * 1;
-        store.dispatch(decrement(num));
-        this.setState({count: store.getState().test});
+        this.props.decrement(num);
     }
     incrementIfOdd = () => {
         let num = this.currentNum.current.value * 1;
-        if(this.state.count % 2 === 1){
-            store.dispatch(increment(num));
-            this.setState({count: store.getState().test});
+        if(this.props.count % 2 === 1){
+            this.props.increment(num);
         }
     }
     incrementIfAsync = () => {
         let num = this.currentNum.current.value * 1;
         setTimeout(() => {
-            store.dispatch(increment(num));
-            this.setState({count: store.getState().test});
+            this.props.increment(num);
         },2000);
     }
     render(){
-        console.log(store.getState());
-        let {count} = this.state
+        let {count} = this.props
         return(
-            <Provider store={store}>
             <div>
                 <p>click {count} times </p>
                 <div className="content">
@@ -66,7 +59,6 @@ export default class Redux extends Component{
                     <button onClick={this.incrementIfAsync}>increment if async</button>
                 </div>
             </div>
-            </Provider>
         )
     }
 }
