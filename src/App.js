@@ -3,7 +3,7 @@ import React,{Component} from 'react'
 import {BrowserRouter,Switch,Route} from "react-router-dom"
 
 import Demo from './pages/redux-test/demo-react'
-import Redux from './pages/redux-test/redux'
+import TestReduct from './pages/redux-test/redux'
 import Login from './pages/login/login'
 import Main from './pages/main/main'
 class App extends Component{
@@ -31,7 +31,7 @@ class App extends Component{
             <BrowserRouter>
                 <Switch>
                     <Route path="/demo" component={Demo}></Route>
-                    <Route path="/redux" component={Redux}></Route>
+                    <Route path="/redux" component={TestReduct}></Route>
                     <Route path="/login" component={Login}></Route>
                     <Route path="/" component={Main}></Route>
                 </Switch>

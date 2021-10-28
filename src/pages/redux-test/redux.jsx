@@ -8,7 +8,7 @@ import React,{Component} from "react"
 import "./redux.less"
 import PropTypes from "prop-types"
 
-export default class Redux extends Component{
+export default class TestReduct extends Component{
     
     static propTypes = {
         count: PropTypes.number.isRequired,
