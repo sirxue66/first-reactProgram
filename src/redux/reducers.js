@@ -9,7 +9,7 @@ const reducer = (state = 0,action) => {
         case INCREMENT:
             return state + action.value;
         case DECREMENT:
-            return state - action.type;
+            return state - action.value;
         default:
             return state;
     }

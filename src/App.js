@@ -1,7 +1,6 @@
 import React,{Component} from 'react'
 // BrowserRouter 路径没有#  HashRouter 路径有#
 import {BrowserRouter,Switch,Route} from "react-router-dom"
-
 import Demo from './pages/redux-test/demo-react'
 import TestReduct from './pages/redux-test/redux'
 import Login from './pages/login/login'
