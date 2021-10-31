@@ -8,6 +8,10 @@ import {withRouter} from "react-router-dom"
 import menuList from "../../config/menuConfig";
 import storageUtils from "../../utils/storageUtils"; 
 import LinkButton from "../common/linkButton"
+import store from "store";
+
+// 使用redux获取title名
+import {connect} from "react-redux"
 
 class Headers extends Component{
     state = {
@@ -55,6 +59,7 @@ class Headers extends Component{
             content:"确定退出吗？",
             onOk:() => {
                 // 清空storage内存
+                store.clearAll();         //redux使用store实现了数据缓存，所以退出要清楚所有localstorage缓存
                 storageUtils.removeUser();
                 userMessage.user = {};
                 this.props.history.replace("/login");
@@ -73,7 +78,9 @@ class Headers extends Component{
     render(){
         const username = userMessage.user.username;
         const {currentTime,dayPictureUrl,weather,weatherImg} = this.state;
-        const title = this.getCurrentTitle();
+        // const title = this.getCurrentTitle();
+            // 使用redux获取头部名称    
+        const title = this.props.headerTitle
         // 验证react渲染机制，基本就是1秒渲染一次
         // const t = formateDate(Date.now())
         return(
@@ -97,4 +104,7 @@ class Headers extends Component{
     }
 }
 
-export default withRouter(Headers)
+export default connect(
+    state => ({headerTitle: state.headerTitle}),
+    {}
+)(withRouter(Headers))

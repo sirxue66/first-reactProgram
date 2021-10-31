@@ -1,6 +1,6 @@
 import React,{Component} from "react"
 import "./login.less"
-import logo from "../../assets/img/loginIoc.jpg"
+import logo from "../../assets/img/reactpng.png"
 import{Form,Input,Button,Icon,message} from "antd"
 // import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { login } from "../../api"
@@ -48,6 +48,18 @@ class Login extends Component{
         this.props.history.replace("/register");
     }
 
+    componentWillMount(){
+        this.deg = 20;
+        this.logo = React.createRef();
+    }
+    componentDidMount(){
+        console.log(this.logo.current.style)
+        setInterval(() => {
+            this.deg += 30;
+            this.logo.current.style.transform = `rotate(${this.deg}deg)`
+        }, 100);
+    }
+
     render(){
         const { getFieldDecorator } = this.props.form
         if(userMessage.user && userMessage.user._id){
@@ -58,7 +70,7 @@ class Login extends Component{
         return(
             <div className="login">
                 <header className="login-header">
-                    <img src={logo} alt="logo"/>
+                    <img ref={this.logo} src={logo} alt="logo" />
                     <h1>React:后台管理项目</h1>
                 </header>
                 <section className="login-content">

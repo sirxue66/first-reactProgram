@@ -5,8 +5,17 @@ import logo from "../../assets/img/manage.png"
 import menuList from "../../config/menuConfig"
 import { Menu, Icon } from 'antd';
 import userMessage from "../../utils/userMessage"
+
+import { connect } from "react-redux"
+import { setHeaderTitle } from "../../redux/actions"
+import PropType from "prop-types"
 const {SubMenu} = Menu
 class Nav extends Component{
+
+    // 声明props，简单的话可以不声明，直接使用
+    static propType = {
+        setHeaderTitle: PropType.func.isRequired 
+    }
     // 利用数组数据动态生成导航结构  map+递归
     getMenuNodes_map = (menu) => {
         return menu.map(item => {
@@ -44,7 +53,7 @@ class Nav extends Component{
                 if(!item.children){
                     pre.push(
                         (
-                            <Menu.Item key={item.key}>
+                            <Menu.Item key={item.key} onClick={() => this.props.setHeaderTitle(item.title)}>
                             <Link to={item.key}>
                             <Icon type={item.icon} />
                             <span>{item.title}</span>
@@ -137,4 +146,7 @@ class Nav extends Component{
     }
 }
 // withRouter 将一个非路由组件包装成一个新的组件，从而获得路由组件的功能
-export default withRouter(Nav)
+export default connect(
+    state => ({}),
+    {setHeaderTitle}
+)(withRouter(Nav))
