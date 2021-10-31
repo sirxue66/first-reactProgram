@@ -13,7 +13,8 @@ export default class TestReduct extends Component{
     static propTypes = {
         count: PropTypes.number.isRequired,
         increment: PropTypes.func.isRequired,
-        decrement: PropTypes.func.isRequired
+        decrement: PropTypes.func.isRequired,
+        incrementAsync: PropTypes.func.isRequired
     }
     constructor(props){
         super(props)
@@ -36,9 +37,10 @@ export default class TestReduct extends Component{
     }
     incrementIfAsync = () => {
         let num = this.currentNum.current.value * 1;
-        setTimeout(() => {
-            this.props.increment(num);
-        },2000);
+        // setTimeout(() => {
+        //     this.props.increment(num);
+        // },2000);
+        this.props.incrementAsync(num);
     }
     render(){
         let {count} = this.props
